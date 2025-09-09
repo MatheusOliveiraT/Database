@@ -1,0 +1,45 @@
+DROP TABLE IF EXISTS MEDICO_TRATA_PACIENTE;
+DROP TABLE IF EXISTS MEDICO_TEM_ESPECIALIDADE;
+DROP TABLE IF EXISTS QUARTO;
+DROP TABLE IF EXISTS PACIENTE;
+DROP TABLE IF EXISTS MEDICO;
+DROP TABLE IF EXISTS ESPECIALIDADE;
+
+CREATE TABLE ESPECIALIDADE (
+	nome VARCHAR(100) PRIMARY KEY
+);
+CREATE TABLE MEDICO (
+	crm VARCHAR(20) PRIMARY KEY,
+    nome VARCHAR(100),
+    salario DECIMAL(10,2),
+    especialidade_contratado VARCHAR(100) NOT NULL,
+    FOREIGN KEY (especialidade_contratado) REFERENCES ESPECIALIDADE (nome)
+);
+CREATE TABLE PACIENTE (
+	cpf VARCHAR(12) PRIMARY KEY,
+    nome VARCHAR(100),
+    rg VARCHAR(11),
+    horario_atendimento DATE,
+    crm_medico_responsavel VARCHAR(20) NOT NULL,
+    FOREIGN KEY (crm_medico_responsavel) REFERENCES MEDICO (crm)
+);
+CREATE TABLE QUARTO (
+	num INT PRIMARY KEY,
+    andar INT,
+    cpf_paciente VARCHAR(12) UNIQUE,
+    FOREIGN KEY (cpf_paciente) REFERENCES PACIENTE (cpf)
+);
+CREATE TABLE MEDICO_TEM_ESPECIALIDADE (
+	crm_medico VARCHAR(20),
+    nome_especialidade VARCHAR(100) NOT NULL,
+    FOREIGN KEY (crm_medico) REFERENCES MEDICO (crm),
+    FOREIGN KEY (nome_especialidade) REFERENCES ESPECIALIDADE (nome),
+    PRIMARY KEY (crm_medico, nome_especialidade)
+);
+CREATE TABLE MEDICO_TRATA_PACIENTE (
+	crm_medico VARCHAR(20),
+    cpf_paciente VARCHAR(12),
+    FOREIGN KEY (crm_medico) REFERENCES MEDICO (crm),
+    FOREIGN KEY (cpf_paciente) REFERENCES PACIENTE (cpf),
+    PRIMARY KEY (crm_medico, cpf_paciente)
+);

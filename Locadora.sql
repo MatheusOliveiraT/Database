@@ -1,0 +1,44 @@
+DROP TABLE IF EXISTS ATOR_ATUA_FILME;
+DROP TABLE IF EXISTS DVD;
+DROP TABLE IF EXISTS CLIENTE;
+DROP TABLE IF EXISTS FILME;
+DROP TABLE IF EXISTS GENERO;
+DROP TABLE IF EXISTS ATOR;
+
+CREATE TABLE ATOR (
+	nome_real VARCHAR(100) PRIMARY KEY
+);
+CREATE TABLE GENERO (
+	descricao VARCHAR(200) PRIMARY KEY
+);
+CREATE TABLE FILME (
+	id INTEGER PRIMARY KEY,
+    nome VARCHAR(100),
+    genero VARCHAR(200) NOT NULL,
+    FOREIGN KEY (genero) REFERENCES GENERO (descricao)
+);
+CREATE TABLE CLIENTE (
+	num INT PRIMARY KEY,
+    nome VARCHAR(20),
+    sobrenome VARCHAR(80),
+    telefone VARCHAR(11),
+    endereco VARCHAR(200),
+    data_devolucao DATE,
+    data_emprestimo DATE,
+    valor_pago DECIMAL(10,2),
+    valor_a_pagar DECIMAL(10,2)
+);
+CREATE TABLE DVD (
+	id INT PRIMARY KEY,
+    filme_id INT NOT NULL,
+    num_cliente_emprestimo INT,
+    FOREIGN KEY (filme_id) REFERENCES FILME (id),
+    FOREIGN KEY (num_cliente_emprestimo) REFERENCES CLIENTE (num)
+);
+CREATE TABLE ATOR_ATUA_FILME (
+	nome_ator VARCHAR(100),
+    id_filme INTEGER,
+    FOREIGN KEY (nome_ator) REFERENCES ATOR (nome_real),
+    FOREIGN KEY (id_filme) REFERENCES FILME (id),
+    PRIMARY KEY (nome_ator, id_filme)
+);
